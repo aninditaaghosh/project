@@ -7,6 +7,10 @@ describe User do
 password: "foobar", password_confirmation: "foobar")
   end
 
+  it { should respond_to(:password_confirmation) }
+  it { should respond_to(:remember_token) }
+  it { should respond_to(:authenticate) }
+
 subject { @user }
 
   it { should respond_to(:name) }
@@ -94,7 +98,7 @@ password: " ", password_confirmation: " ")
   describe "when password doesn't match confirmation" do
     before { @user.password_confirmation = "mismatch" }
     it { should_not be_valid }
-end
+  end
 
   describe "with a password that's too short" do
     before { @user.password =  @user.password_confirmation = "a" * 5 }
@@ -116,5 +120,10 @@ end
 specify { expect(user_for_invalid_password).to be_false }
   end
  end
+
+  describe "remember token" do
+    before { @user.save }
+    its(:remember_token) { should_not be_blank }
+  end
 
 end
